@@ -118,7 +118,6 @@ const Login: React.FC = () => {
     try {
       // 登录
       const msg = await login({ ...values, type });
-      console.log(msg)
       if (msg.id) {
         const defaultLoginSuccessMessage = '登录成功！';
         message.success(defaultLoginSuccessMessage);
@@ -164,7 +163,7 @@ const Login: React.FC = () => {
             minWidth: 280,
             maxWidth: '75vw',
           }}
-          logo={<img alt="logo" src="/logo.gif" />}
+          logo={<img alt="logo" src="/logo.png" />}
           title="用户管理中心"
           subTitle={'最好的用户信息管理系统'}
           initialValues={{
@@ -220,10 +219,7 @@ const Login: React.FC = () => {
                   size: 'large',
                   prefix: <UserOutlined />,
                 }}
-                placeholder={intl.formatMessage({
-                  id: '用户名: admin or user',
-                  defaultMessage: '用户名: admin or user',
-                })}
+                placeholder={ '用户名: admin'}
                 rules={[
                   {
                     required: true,
@@ -242,10 +238,7 @@ const Login: React.FC = () => {
                   size: 'large',
                   prefix: <LockOutlined />,
                 }}
-                placeholder={intl.formatMessage({
-                  id: '密码: admin',
-                  defaultMessage: '密码: admin',
-                })}
+                placeholder={'密码: 12345678'}
                 rules={[
                   {
                     required: true,
@@ -273,6 +266,7 @@ const Login: React.FC = () => {
               style={{
                 float: 'right',
               }}
+              href={`/user/register`}
             >
               <FormattedMessage id="用户注册" />
             </a>

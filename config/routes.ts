@@ -51,6 +51,13 @@ export default [
     ],
   },
   {
+    path: '/user-manage',
+    name: '用户管理',
+    access: 'canAdmin',
+    icon: 'user',
+    component: './Admin/UserManage',
+  },
+  {
     name: 'list.table-list',
     icon: 'table',
     path: '/list',

@@ -13,6 +13,11 @@ const isDev = process.env.NODE_ENV === 'development';
 const loginPath = '/user/login';
 const registerPath = '/user/register';
 /**
+ * 无需登录的页面地址
+ */
+const NO_NEED_LOGIN_WHITE_LIST = [registerPath, loginPath];
+
+/**
  * @see  https://umijs.org/zh-CN/plugins/plugin-initial-state
  * */
 export async function getInitialState(): Promise<{
@@ -22,20 +27,23 @@ export async function getInitialState(): Promise<{
   fetchUserInfo?: () => Promise<API.CurrentUser | undefined>;
 }> {
   const fetchUserInfo = async () => {
-    // try {
-    //   const msg = await queryCurrentUser({
-    //     skipErrorHandler: true,
-    //   });
-    //   return msg.data;
-    // } catch (error) {
-    //   history.push(loginPath);
-    // }
+    try {
+      const userInfo = await queryCurrentUser({
+        skipErrorHandler: true,
+      });
+      return userInfo;
+    } catch (error) {
+      history.push(loginPath);
+    }
     return undefined;
   };
   // 如果不是登录页面，执行
   const { location } = history;
-  if (location.pathname !== loginPath) {
+
+  // 不是无需登录白名单则需要获取用户
+  if (!NO_NEED_LOGIN_WHITE_LIST.includes(location.pathname)) {
     const currentUser = await fetchUserInfo();
+
     return {
       fetchUserInfo,
       currentUser,
@@ -53,20 +61,20 @@ export const layout: RunTimeLayoutConfig = ({ initialState, setInitialState }) =
   return {
     actionsRender: () => [<Question key="doc" />, <SelectLang key="SelectLang" />],
     avatarProps: {
-      src: initialState?.currentUser?.avatar,
+      src: initialState?.currentUser?.avatarUrl,
       title: <AvatarName />,
       render: (_, avatarChildren) => {
         return <AvatarDropdown>{avatarChildren}</AvatarDropdown>;
       },
     },
     waterMarkProps: {
-      content: initialState?.currentUser?.name,
+      content: initialState?.currentUser?.userAccount,
     },
     footerRender: () => <Footer />,
     onPageChange: () => {
       const { location } = history;
-      const whiteList = [registerPath, loginPath];
-      if (whiteList.includes(location.pathname)) {
+console.log(initialState?.currentUser);
+      if (NO_NEED_LOGIN_WHITE_LIST.includes(location.pathname)) {
         return;
       }
       // 如果没有登录，重定向到 login
