@@ -1,6 +1,7 @@
 // @ts-ignore
 /* eslint-disable */
-import { request } from '@umijs/max';
+// import { request } from '@umijs/max';
+import request from '@/plugins/globalRequest';
 
 const BASE_PERFIX = '/api';
 
@@ -12,9 +13,9 @@ export async function currentUser(options?: { [key: string]: any }) {
   });
 }
 
-/** 退出登录接口 POST /api/login/outLogin */
+/** 退出登录接口 POST /api/user/logout */
 export async function outLogin(options?: { [key: string]: any }) {
-  return request<Record<string, any>>('/api/login/outLogin', {
+  return request<Record<string, any>>(BASE_PERFIX +'/user/logout', {
     method: 'POST',
     ...(options || {}),
   });
